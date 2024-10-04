@@ -16,24 +16,12 @@ As a data source will serve custom server, sending weather data every second.
     private String precipitationType;    // Type of precipitation (e.g., "rain", "snow", "hail")
     private double visibility;           // Visibility distance in kilometers
     private String condition;            // General weather condition (e.g., "sunny", "cloudy", "fog")
-
-### Extended atmospheric attributes
-    private double dewPoint;             // Dew point temperature in Celsius
-    private double uvIndex;              // UV Index (0 to 11+)
-    private double airQualityIndex;      // Air Quality Index (AQI)
-    private double particulateMatter25;  // PM2.5 level in µg/m³ (fine particulate matter)
-    private double particulateMatter10;  // PM10 level in µg/m³ (larger particulate matter)
     
 ### Environmental attributes
     private String cloudCoverage;        // Cloud coverage as a percentage or description (e.g., "75% cloudy")
     private String weatherAlert;         // Description of any active weather alerts (e.g., "tornado warning")
     private String dayOrNight;           // "day" or "night", based on current time and location
 
-### Astronomical attributes
-    private double solarElevationAngle;  // Solar elevation angle in degrees (above horizon)
-    private double lunarPhase;           // Moon phase as a percentage of illumination (0 = new moon, 100 = full moon)
-    private String lunarPhaseDescription;// Textual description of the moon phase (e.g., "waxing crescent")
-    
 ### Wind and storm conditions
     private double gustSpeed;            // Maximum wind gust speed in meters per second
     private String stormStatus;          // Description of any storm activity (e.g., "no storm", "tropical storm")
