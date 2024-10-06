@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ru.nms.labs</groupId>
-        <artifactId>streaming_data_processing</artifactId>
+        <artifactId>stream_data_processing</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>data_source</artifactId>
+    <groupId>ru.nms.labs</groupId>
+    <artifactId>model</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
@@ -17,4 +18,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.30</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>

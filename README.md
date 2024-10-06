@@ -11,34 +11,20 @@ As a data source will serve custom server, sending weather data every second.
     private double humidity;             // Humidity as a percentage
     private double pressure;             // Atmospheric pressure in hPa (hectopascal)
     private double windSpeed;            // Wind speed in meters per second
-    private String windDirection;        // Wind direction as compass point (e.g., "N", "NE")
-    private double precipitation;        // Precipitation in mm (rainfall/snowfall)
-    private String precipitationType;    // Type of precipitation (e.g., "rain", "snow", "hail")
-    private double visibility;           // Visibility distance in kilometers
-    private String condition;            // General weather condition (e.g., "sunny", "cloudy", "fog")
-    
-### Environmental attributes
-    private String cloudCoverage;        // Cloud coverage as a percentage or description (e.g., "75% cloudy")
-    private String weatherAlert;         // Description of any active weather alerts (e.g., "tornado warning")
-    private String dayOrNight;           // "day" or "night", based on current time and location
-
-### Wind and storm conditions
-    private double gustSpeed;            // Maximum wind gust speed in meters per second
-    private String stormStatus;          // Description of any storm activity (e.g., "no storm", "tropical storm")
-    private double lightningActivity;    // Number of lightning strikes in the vicinity (per km²)
 
 ### Geographic and temporal attributes
-    private String location;             // City or region where the weather is measured
     private double latitude;             // Latitude of the location
     private double longitude;            // Longitude of the location
     private String observationTime;      // Time of the observation (ISO 8601 format)
 
 ## Desired results
-Goal of data processing is creating weather forecast, for today, three days, 10 days and 30 days.
+Goal of data processing is calculating predictability of weather for specific location, based on incoming weather data and forecast.
 
 ## Machine learning usage
 Machine learning can be used to create forecast and to make it more precise.
 
 ## Latency resistance && data loss concerns
-As weather changes not so frequently (not a matter of seconds), data loss and latency are tolerable.
-That is why at-most-one semantics seems to be the most suitable.
+As weather changes not so frequently (not a matter of seconds), data loss and latency for weather data receiving are tolerable.
+However, it is crucial to secure data till the moment of comparison real data with forecast.
+
+For data receiving at-most-one semantics seems to be the most suitable. Replicas must be configured for temporary data storage.
