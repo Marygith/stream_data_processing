@@ -9,6 +9,4 @@ public class MessageOutput {
     private String from;
     private String text;
     private String time;
-
-
 }

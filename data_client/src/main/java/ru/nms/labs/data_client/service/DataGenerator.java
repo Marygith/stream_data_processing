@@ -27,7 +27,7 @@ public class DataGenerator {
 
         double temperature = previsousWeatherData.getTemperature() + getRandomChange(-0.1, 0.1);
         int humidity = previsousWeatherData.getHumidity() + getRandomChange(-1, 1);
-        double windSpeed = previsousWeatherData.getWindSpeed() +  getRandomChange(-0.5, 0.5);
+        double windSpeed = previsousWeatherData.getWindSpeed() + getRandomChange(-0.5, 0.5);
         double pressure = previsousWeatherData.getPressure() + getRandomChange(-0.2, 0.2);
 
         temperature = Math.max(-70, Math.min(70, temperature));

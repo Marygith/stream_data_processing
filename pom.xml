@@ -12,6 +12,7 @@
         <module>data_server</module>
         <module>data_client</module>
         <module>model</module>
+        <module>forecast-service</module>
     </modules>
 
     <properties>
