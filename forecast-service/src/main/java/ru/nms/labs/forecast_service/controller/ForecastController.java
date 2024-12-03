@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.nms.labs.forecast_service.mapper.ForecastMapper;
 import ru.nms.labs.forecast_service.service.ForecastService;
-import ru.nms.labs.model.ForecastWeather;
 import ru.nms.labs.model.SectorWeather;
 
 @RestController
@@ -22,13 +21,13 @@ public class ForecastController {
     }
 
     @GetMapping
-    public ResponseEntity<ForecastWeather> getForecast(
+    public ResponseEntity<SectorWeather> getForecast(
             @RequestParam int sector,
             @RequestParam String observationTime
     ) {
 
         return forecastService.getForecast(sector, observationTime)
-                .map(forecastMapper::toForecastWeather)
+                .map(forecastMapper::toSectorWeather)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -5,15 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ForecastWeather {
+public class SectorDispersion {
     private int sector;
-    private double temperature;
-    private int humidity;
-    private double windSpeed;
-    private double pressure;
-    private String observationDate;
+    private LocalDate calculationDay;
+    private double dispersion;
+
 }

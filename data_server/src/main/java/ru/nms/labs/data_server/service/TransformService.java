@@ -4,13 +4,17 @@ import org.springframework.stereotype.Service;
 import ru.nms.labs.model.SectorWeather;
 import ru.nms.labs.model.WeatherData;
 
+import java.time.LocalDate;
+
+import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
+
 @Service
 public class TransformService {
 
     public SectorWeather transform(WeatherData weatherData) {
         return SectorWeather.builder()
                 .pressure(weatherData.getPressure())
-                .observationTime(weatherData.getObservationTime())
+                .observationDate(weatherData.getObservationTime())
                 .windSpeed(weatherData.getWindSpeed())
                 .temperature(weatherData.getTemperature())
                 .humidity(weatherData.getHumidity())

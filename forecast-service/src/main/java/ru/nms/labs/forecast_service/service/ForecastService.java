@@ -23,7 +23,7 @@ public class ForecastService {
 
     public void createOrUpdateForecast(SectorWeather weatherData) {
         log.info("received weather data: {}", weatherData);
-        ForecastId forecastId = new ForecastId(weatherData.getSector(), LocalDate.parse(weatherData.getObservationTime(), ISO_DATE_TIME));
+        ForecastId forecastId = new ForecastId(weatherData.getSector(), LocalDate.parse(weatherData.getObservationDate(), ISO_DATE_TIME));
 
         Optional<Forecast> existingForecastOpt = repository.findById(forecastId);
 
@@ -47,7 +47,7 @@ public class ForecastService {
         double pressureChange = random.nextDouble() * 0.5;      // Random increase: [0, 0.5]
 
         Forecast forecast = new Forecast();
-        LocalDate nextDay = LocalDate.parse(weatherData.getObservationTime(), ISO_DATE_TIME).plusDays(1);
+        LocalDate nextDay = LocalDate.parse(weatherData.getObservationDate(), ISO_DATE_TIME).plusDays(1);
         forecast.setId(new ForecastId(weatherData.getSector(), nextDay));
 
         if (existingForecast != null) {

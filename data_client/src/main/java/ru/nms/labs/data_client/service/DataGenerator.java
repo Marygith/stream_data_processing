@@ -12,10 +12,11 @@ import java.util.Random;
 public class DataGenerator {
 
     private final Random random = new Random();
+    private LocalDateTime currentDate = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0); // Start at 00:00
+    private int currentHour = 0;
 
-    public WeatherData generate(WeatherData weatherData) {
-
-        WeatherData previsousWeatherData = Optional.ofNullable(weatherData)
+    public WeatherData generate(WeatherData previousWeatherData) {
+        WeatherData previous = Optional.ofNullable(previousWeatherData)
                 .orElse(new WeatherData(
                         random.nextInt(0, 180),
                         random.nextInt(0, 180),
@@ -23,26 +24,34 @@ public class DataGenerator {
                         random.nextInt(0, 100),
                         random.nextDouble(0, 30),
                         random.nextDouble(94, 104),
-                        LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME)));
+                        currentDate.format(DateTimeFormatter.ISO_DATE_TIME)));
 
-        double temperature = previsousWeatherData.getTemperature() + getRandomChange(-0.1, 0.1);
-        int humidity = previsousWeatherData.getHumidity() + getRandomChange(-1, 1);
-        double windSpeed = previsousWeatherData.getWindSpeed() + getRandomChange(-0.5, 0.5);
-        double pressure = previsousWeatherData.getPressure() + getRandomChange(-0.2, 0.2);
+        double temperature = previous.getTemperature() + getRandomChange(-0.1, 0.1);
+        int humidity = previous.getHumidity() + getRandomChange(-1, 1);
+        double windSpeed = previous.getWindSpeed() + getRandomChange(-0.5, 0.5);
+        double pressure = previous.getPressure() + getRandomChange(-0.2, 0.2);
 
         temperature = Math.max(-70, Math.min(70, temperature));
         humidity = Math.max(0, Math.min(100, humidity));
         windSpeed = Math.max(0, windSpeed);
         pressure = Math.max(94, Math.min(104, pressure));
 
+        LocalDateTime timestamp = currentDate.withHour(currentHour);
+
+        currentHour++;
+        if (currentHour >= 24) {
+            currentHour = 0;
+            currentDate = currentDate.plusDays(1);
+        }
+
         return new WeatherData(
-                previsousWeatherData.getLon(),
-                previsousWeatherData.getLat(),
+                previous.getLon(),
+                previous.getLat(),
                 temperature,
                 humidity,
                 windSpeed,
                 pressure,
-                LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+                timestamp.format(DateTimeFormatter.ISO_DATE_TIME));
     }
 
     private double getRandomChange(double minChange, double maxChange) {
