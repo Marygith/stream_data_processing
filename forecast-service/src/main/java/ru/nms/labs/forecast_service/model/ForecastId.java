@@ -12,5 +12,5 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ForecastId implements Serializable {
     private int sector;
-    private LocalDate observationDate;
+    private String observationDate;
 }

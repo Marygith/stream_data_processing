@@ -15,5 +15,5 @@ public class WeatherData {
     private int humidity;
     private double windSpeed;
     private double pressure;
-    private String observationTime; //local date time format
+    private String observationTime;
 }

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sector Dispersion Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.2/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 50%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        #histogram {
+            width: 70%;
+            margin: 20px auto;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+<h1 style="text-align: center;">Sector Dispersion Dashboard</h1>
+<div id="histogram"></div>
+<table>
+    <thead>
+    <tr>
+        <th>Sector</th>
+        <th>Average Dispersion</th>
+    </tr>
+    </thead>
+    <tbody id="sectorTableBody"></tbody>
+</table>
+
+<script>
+    const socket = new SockJS('http://localhost:8084/ws');
+    const stompClient = Stomp.over(socket);
+
+    const sectorData = {};
+
+    function updateUI() {
+        const tableBody = document.getElementById("sectorTableBody");
+        tableBody.innerHTML = "";
+
+        Object.keys(sectorData).forEach(sector => {
+            const avgDispersion = (sectorData[sector].sum / sectorData[sector].count).toFixed(2);
+
+            const row = `<tr>
+                            <td>${sector}</td>
+                            <td>${avgDispersion}</td>
+                         </tr>`;
+            tableBody.innerHTML += row;
+        });
+
+        drawHistogram();
+    }
+
+    function drawHistogram() {
+        const histogramDiv = document.getElementById("histogram");
+        histogramDiv.innerHTML = "";
+
+        const canvas = document.createElement("canvas");
+        canvas.width = histogramDiv.offsetWidth;
+        canvas.height = histogramDiv.offsetHeight;
+        histogramDiv.appendChild(canvas);
+
+        const ctx = canvas.getContext("2d");
+        const sectors = Object.keys(sectorData);
+        const values = sectors.map(sector => sectorData[sector].sum / sectorData[sector].count);
+
+        const maxValue = Math.max(...values);
+        const barWidth = canvas.width / sectors.length;
+
+        sectors.forEach((sector, index) => {
+            const barHeight = (values[index] / maxValue) * canvas.height;
+            ctx.fillStyle = "blue";
+            ctx.fillRect(index * barWidth, canvas.height - barHeight, barWidth - 10, barHeight);
+            ctx.fillStyle = "black";
+            ctx.fillText(`Sector ${sector}`, index * barWidth + 5, canvas.height - 10);
+        });
+    }
+
+    stompClient.connect({}, function () {
+        console.log("Connected to WebSocket");
+
+        stompClient.subscribe('/topic/dispersion', function (message) {
+            console.log("got message" + message.body);
+
+            const data = JSON.parse(message.body);
+            const { sector, dispersion } = data;
+
+            if (!sectorData[sector]) {
+                sectorData[sector] = { sum: 0, count: 0 };
+            }
+
+            sectorData[sector].sum += dispersion;
+            sectorData[sector].count += 1;
+
+            updateUI();
+        });
+    });
+</script>
+</body>
+</html>

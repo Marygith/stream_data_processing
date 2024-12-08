@@ -57,7 +57,7 @@ public class WeatherClient {
     public void sendMessage() {
         log.info("About to send weather message");
         if (stompSession != null) {
-            WeatherData message = dataGenerator.generate(null); //todo make data generation coherent
+            WeatherData message = dataGenerator.generate();
             stompSession.send("/app/weather", message);
             log.info("Sent message: {}", message);
         }

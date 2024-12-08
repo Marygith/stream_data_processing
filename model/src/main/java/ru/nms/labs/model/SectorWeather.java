@@ -15,5 +15,5 @@ public class SectorWeather {
     private int humidity;
     private double windSpeed;
     private double pressure;
-    private String observationDate; //local date format
+    private String observationDate;
 }

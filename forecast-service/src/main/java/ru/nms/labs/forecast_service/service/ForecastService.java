@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Random;
 
+import static java.time.format.DateTimeFormatter.ISO_DATE;
 import static java.time.format.DateTimeFormatter.ISO_DATE_TIME;
 
 @Slf4j
@@ -23,7 +24,7 @@ public class ForecastService {
 
     public void createOrUpdateForecast(SectorWeather weatherData) {
         log.info("received weather data: {}", weatherData);
-        ForecastId forecastId = new ForecastId(weatherData.getSector(), LocalDate.parse(weatherData.getObservationDate(), ISO_DATE_TIME));
+        ForecastId forecastId = new ForecastId(weatherData.getSector(), LocalDate.parse(weatherData.getObservationDate(), ISO_DATE_TIME).format(ISO_DATE));
 
         Optional<Forecast> existingForecastOpt = repository.findById(forecastId);
 
@@ -34,8 +35,10 @@ public class ForecastService {
         repository.save(newForecast);
     }
 
-    public Optional<Forecast> getForecast(int sector, String observationTime) {
-        return repository.findById(new ForecastId(sector, LocalDate.parse(observationTime, ISO_DATE_TIME)));
+    public Optional<Forecast> getForecast(int sector, String observationDate) {
+        ForecastId id = new ForecastId(sector, observationDate);
+        log.info("sector: {}, observationDate: {}", id.getSector(), id.getObservationDate());
+        return repository.findById(id);
     }
 
     private Forecast generateForecast(Forecast existingForecast, SectorWeather weatherData) {
@@ -48,7 +51,7 @@ public class ForecastService {
 
         Forecast forecast = new Forecast();
         LocalDate nextDay = LocalDate.parse(weatherData.getObservationDate(), ISO_DATE_TIME).plusDays(1);
-        forecast.setId(new ForecastId(weatherData.getSector(), nextDay));
+        forecast.setId(new ForecastId(weatherData.getSector(), nextDay.format(ISO_DATE)));
 
         if (existingForecast != null) {
             log.info("sector weather with this sector and observation time already exists, starting update");

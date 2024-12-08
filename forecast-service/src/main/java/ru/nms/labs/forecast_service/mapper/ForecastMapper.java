@@ -13,11 +13,7 @@ import java.time.format.DateTimeFormatter;
 public interface ForecastMapper {
 
     @Mapping(target = "sector", source = "id.sector")
-    @Mapping(target = "observationDate", source = "id.observationDate", qualifiedByName = "dateToString")
+    @Mapping(target = "observationDate", source = "id.observationDate")
     SectorWeather toSectorWeather(Forecast forecast);
 
-    @Named("dateToString")
-    default String dateToString(LocalDate date) {
-        return date.format(DateTimeFormatter.ISO_DATE);
-    }
 }

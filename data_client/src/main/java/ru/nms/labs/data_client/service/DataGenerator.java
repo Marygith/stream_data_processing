@@ -5,6 +5,8 @@ import ru.nms.labs.model.WeatherData;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -12,14 +14,18 @@ import java.util.Random;
 public class DataGenerator {
 
     private final Random random = new Random();
-    private LocalDateTime currentDate = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0); // Start at 00:00
+    private LocalDateTime currentDate = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0);
     private int currentHour = 0;
 
-    public WeatherData generate(WeatherData previousWeatherData) {
-        WeatherData previous = Optional.ofNullable(previousWeatherData)
+    Map<Integer, WeatherData> previousWeathers = new HashMap<>();
+    public WeatherData generate() {
+        int newWeatherLat = random.nextInt(0, 5); //just to make project more visual,
+        int newWeatherLon = random.nextInt(0, 5); //restricted coordinate range
+
+        WeatherData previous = Optional.ofNullable(previousWeathers.get(mapToSector(newWeatherLat, newWeatherLon)))
                 .orElse(new WeatherData(
-                        random.nextInt(0, 180),
-                        random.nextInt(0, 180),
+                        newWeatherLat,
+                        newWeatherLon,
                         random.nextDouble(-70, 70),
                         random.nextInt(0, 100),
                         random.nextDouble(0, 30),
@@ -60,5 +66,13 @@ public class DataGenerator {
 
     private int getRandomChange(int minChange, int maxChange) {
         return random.nextInt((maxChange - minChange) + 1) + minChange;
+    }
+
+    private static int mapToSector(double latitude, double longitude) {
+        int latIndex = (int) Math.floor(latitude + 90);
+
+        int lonIndex = (int) Math.floor(longitude + 180);
+
+        return (latIndex * 360) + lonIndex;
     }
 }
